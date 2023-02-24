@@ -1,7 +1,10 @@
 package com.restapi.springbootrestapi.controller;
 
+import com.restapi.springbootrestapi.entity.Comment;
 import com.restapi.springbootrestapi.entity.dto.CommentDTO;
+import com.restapi.springbootrestapi.repository.CommentRepository;
 import com.restapi.springbootrestapi.service.CommentService;
+import com.restapi.springbootrestapi.utils.response.CommentProjection;
 import com.restapi.springbootrestapi.utils.response.CommentResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,8 @@ import java.util.Optional;
 public class CommentController {
 
     private final CommentService commentService;
+
+    private final CommentRepository commentRepository;
 
     @GetMapping("/getAll")
     public ResponseEntity<List<CommentResponseDTO>> getAllComment()
@@ -46,5 +51,50 @@ public class CommentController {
     public ResponseEntity<String> delete(@RequestParam("idToDelete") Long id)
     {
         return new ResponseEntity<>(commentService.delete(id),HttpStatus.OK);
+    }
+
+    @GetMapping("/findAll")
+    public ResponseEntity<List<Comment>> findAll(){
+        return new ResponseEntity<>(commentRepository.findAll(),HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/findAllComments")
+    public ResponseEntity<List<Comment>> findAllComments(){
+        return new ResponseEntity<>(commentRepository.findAllComments(),HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/findByCommentId")
+    public ResponseEntity<Comment> findByCommentId(@RequestParam(required = false) Long id){
+        return new ResponseEntity<>(commentRepository.findByCommentId(id),HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/findWithLike")
+    public ResponseEntity<List<Comment>> findWithLike(@RequestParam(required = false) String name){
+        return new ResponseEntity<>(commentRepository.findWithLike(name),HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/findWithLikeJPA")
+    public ResponseEntity<List<Comment>> findWithLikeJPA(@RequestParam(required = false) String name){
+        return new ResponseEntity<>(commentRepository.findWithLikeJPA(name),HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/findAllWithNativeQuery")
+    public ResponseEntity<List<Comment>> findAllWithNativeQuery(@RequestParam(required = false) String name){
+        return new ResponseEntity<>(commentRepository.findAllWithNativeQuery(),HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/findByIdWithNativeQuery")
+    public ResponseEntity<Comment> findByIdWithNativeQuery(@RequestParam(required = false) Long id){
+        return new ResponseEntity<>(commentRepository.findByIdWithNativeQuery(id),HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/findByIdWithJPA")
+    public ResponseEntity<Comment> findByIdWithJPA(@RequestParam(required = false) Long id){
+        return new ResponseEntity<>(commentRepository.findByIdWithJPA(id),HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/findAllWithProjection")
+    public ResponseEntity<List<CommentProjection>> findAllWithProjection(@RequestParam(required = false) Long id){
+        return new ResponseEntity<>(commentRepository.findAllWithProjection(),HttpStatus.ACCEPTED);
     }
 }

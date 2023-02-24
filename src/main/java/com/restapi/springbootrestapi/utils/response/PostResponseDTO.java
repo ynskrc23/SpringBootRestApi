@@ -14,5 +14,7 @@ public class PostResponseDTO {
 
     private String content;
 
+    private String phoneNumber;
+
     private Set<CommentResponseDTO> comments;
 }

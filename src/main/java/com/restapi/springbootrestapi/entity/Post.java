@@ -26,6 +26,8 @@ public class Post {
 
     private Integer maxiumOfComments;
 
+    private String phoneNumber;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Comment> comments;
 }
