@@ -1,16 +1,19 @@
 package com.restapi.springbootrestapi.controller;
 
+import com.restapi.springbootrestapi.entity.Post;
+import com.restapi.springbootrestapi.repository.PostRepository;
 import com.restapi.springbootrestapi.service.PostService;
 import com.restapi.springbootrestapi.utils.ValidateObject;
 import com.restapi.springbootrestapi.utils.request.PostDTO;
-import com.restapi.springbootrestapi.utils.response.PostResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -18,6 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final PostRepository postRepository;
 
     @GetMapping("/getAll")
     public ResponseEntity<Object> getAllPost(){
@@ -46,5 +50,10 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> get(@PathVariable("id") Long id){
         return new ResponseEntity<>(postService.findById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllWithPage")
+    public ResponseEntity<Page<Post>> getAllWithPage(@PageableDefault Pageable pageable){
+        return new ResponseEntity<>(postRepository.findAll(pageable), HttpStatus.OK);
     }
 }
