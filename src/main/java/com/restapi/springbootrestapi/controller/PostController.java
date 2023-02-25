@@ -3,6 +3,7 @@ package com.restapi.springbootrestapi.controller;
 import com.restapi.springbootrestapi.entity.Post;
 import com.restapi.springbootrestapi.repository.PostRepository;
 import com.restapi.springbootrestapi.service.PostService;
+import com.restapi.springbootrestapi.utils.PageDTO;
 import com.restapi.springbootrestapi.utils.ValidateObject;
 import com.restapi.springbootrestapi.utils.request.PostDTO;
 import lombok.RequiredArgsConstructor;
@@ -55,5 +56,22 @@ public class PostController {
     @GetMapping("/getAllWithPage")
     public ResponseEntity<Page<Post>> getAllWithPage(@PageableDefault Pageable pageable){
         return new ResponseEntity<>(postRepository.findAll(pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllWithTitlePage")
+    public ResponseEntity<Page<Post>> getAllWithTitlePage(@RequestParam(defaultValue = "", required = false) String title, @PageableDefault Pageable pageable){
+        return new ResponseEntity<>(postRepository.findByTitle(title, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllWithPageCustom")
+    public ResponseEntity<PageDTO> getAllWithPageCustom(
+            @RequestParam(defaultValue = "10", required = false) int size,
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "asc", required = false) String direction,
+            @RequestParam(defaultValue = "", required = false) String properties,
+            @RequestParam(defaultValue = "", required = false) String content,
+            @RequestParam(defaultValue = "", required = false) String title)
+    {
+        return new ResponseEntity<>(postRepository.findAllWithCustomPage(size,page,direction,properties,content,title), HttpStatus.OK);
     }
 }
